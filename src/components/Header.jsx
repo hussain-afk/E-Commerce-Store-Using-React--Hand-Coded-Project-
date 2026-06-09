@@ -1,12 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingBag, User, Search, Menu, X, Heart, Bell, Flame, ArrowRight, ShieldCheck, Zap, ChevronDown } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { ProductContext } from '../utils/context/ProductApi';
 
 export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
-  
-  // New state to manage showing/hiding links on mobile screens
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // --- SEARCH STATES ---
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  
+  const { products } = useContext(ProductContext);
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  // --- HANDLE SEARCH FILTERING ---
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    // Filter products by title or category (adjust fields to match your actual Context API structure)
+    const filtered = products?.filter(product =>
+      product.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category?.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
+
+    setSearchResults(filtered.slice(0, 5)); // Limit to top 5 results for clean design
+  }, [searchQuery, products]);
+
+  // --- CLOSE DROPDOWN ON CLICK OUTSIDE ---
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleResultClick = (productId) => {
+    setSearchQuery('');
+    setShowDropdown(false);
+    setIsMobileSearchOpen(false);
+    navigate(`/products/${productId}`); // Adjust routing pattern if needed
+  };
 
   const mobileLinks = [
     { name: 'Shop All', href: '/shop' },
@@ -57,11 +101,6 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               onMouseEnter={() => setIsMegaMenuOpen(true)}
               onMouseLeave={() => setIsMegaMenuOpen(false)}
             >
-              {/* <button className={`hover:text-white transition-colors flex items-center gap-1 ${isMegaMenuOpen ? 'text-white' : ''}`}>
-                Categories
-                <ChevronDown size={14} className={`transition-transform duration-200 ${isMegaMenuOpen ? 'rotate-180' : ''}`} />
-              </button> */}
-
               {/* MEGA MENU DROP CONTAINER */}
               {isMegaMenuOpen && (
                 <div className="absolute top-[60px] -left-12 w-[540px] bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl shadow-black/80 grid grid-cols-2 gap-6">
@@ -93,36 +132,92 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             <a href="/sale" className="text-red-400 hover:text-red-300 font-semibold transition-colors">Clearance</a>
           </nav>
 
-          {/* ADVANCED INTEGRATED DESKTOP SEARCH */}
-          <div className="hidden md:flex flex-1 max-w-sm lg:max-w-md relative mx-2">
+          {/* --- INTERACTIVE DESKTOP SEARCH --- */}
+          <div ref={dropdownRef} className="hidden md:flex flex-1 max-w-sm lg:max-w-md relative mx-2">
             <div className="relative flex items-center w-full rounded-xl border border-slate-800 bg-slate-950 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all duration-200 group">
               <Search className="absolute left-3.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" size={16} />
               <input 
                 type="text" 
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowDropdown(true);
+                }}
+                onFocus={() => setShowDropdown(true)}
                 placeholder="Search premium products..." 
                 className="w-full bg-transparent py-2 pl-10 pr-4 text-xs text-slate-200 placeholder-slate-500 focus:outline-none rounded-xl"
               />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-3 text-slate-500 hover:text-slate-300">
+                  <X size={14} />
+                </button>
+              )}
             </div>
+
+            {/* DESKTOP SEARCH DROPDOWN RESULTS */}
+            {showDropdown && searchResults.length > 0 && (
+              <div className="absolute top-full left-0 w-full mt-2 bg-slate-950/95 border border-slate-800 rounded-xl overflow-hidden shadow-2xl backdrop-blur-md z-50 max-h-80 overflow-y-auto">
+                {searchResults.map((product) => (
+                  <div
+                    key={product.id}
+                    onClick={() => handleResultClick(product.id)}
+                    className="flex items-center gap-3 p-3 hover:bg-slate-800/60 cursor-pointer transition-colors border-b border-slate-900 last:border-0"
+                  >
+                    {product.image && (
+                      <img src={product.image} alt={product.title} className="w-10 h-10 object-cover rounded-lg bg-slate-900" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-slate-200 truncate">{product.title}</p>
+                      <p className="text-[10px] text-blue-400 font-medium uppercase mt-0.5">{product.category}</p>
+                    </div>
+                    <span className="text-xs font-bold text-slate-300">${product.price}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* DYNAMIC MOBILE SEARCH FULL DRAWER */}
+          {/* --- INTERACTIVE MOBILE SEARCH FULL DRAWER --- */}
           {isMobileSearchOpen && (
-            <div className="absolute inset-x-4 md:hidden flex items-center gap-2 bg-slate-900/95 backdrop-blur-md h-full animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute inset-x-4 md:hidden flex items-center gap-2 bg-slate-900/95 backdrop-blur-md h-full animate-in fade-in zoom-in-95 duration-150 z-50">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 text-slate-500 top-1/2 -translate-y-1/2" size={16} />
                 <input 
                   type="text" 
                   autoFocus
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..." 
                   className="w-full bg-transparent border border-slate-800 bg-slate-950 rounded-xl py-2 pl-10 pr-4 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                 />
               </div>
               <button 
-                onClick={() => setIsMobileSearchOpen(false)}
+                onClick={() => {
+                  setIsMobileSearchOpen(false);
+                  setSearchQuery('');
+                }}
                 className="p-2 text-slate-400 hover:text-white bg-slate-800 rounded-xl"
               >
                 <X size={16} />
               </button>
+
+              {/* MOBILE SEARCH RESULTS DROPDOWN */}
+              {searchResults.length > 0 && (
+                <div className="absolute top-[60px] left-0 w-full bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-xl z-50 max-h-64 overflow-y-auto">
+                  {searchResults.map((product) => (
+                    <div
+                      key={product.id}
+                      onClick={() => handleResultClick(product.id)}
+                      className="flex items-center gap-3 p-3 hover:bg-slate-800 cursor-pointer border-b border-slate-900 last:border-0"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-slate-200 truncate">{product.title}</p>
+                      </div>
+                      <span className="text-xs font-bold text-slate-400">${product.price}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -132,7 +227,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             <button 
               onClick={() => {
                 setIsMobileSearchOpen(true);
-                setIsMobileMenuOpen(false); // close links panel if searching
+                setIsMobileMenuOpen(false); 
               }}
               className="p-2 text-slate-400 hover:text-white rounded-xl md:hidden hover:bg-slate-800/40" 
               aria-label="Search"
@@ -149,12 +244,14 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               <Heart size={18} />
             </button>
 
-            <button className="p-1 text-slate-400 hover:text-white rounded-full flex items-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-950 pr-3 pl-1 h-9 transition-all" aria-label="User profile config">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
-                A
-              </div>
-              <span className="text-xs font-semibold text-slate-300 hidden xl:block">Alex M.</span>
-            </button>
+            <NavLink to='/auth'>
+              <button className="p-1 text-slate-400 hover:text-white rounded-full flex items-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-950 pr-3 pl-1 h-9 transition-all" aria-label="User profile config">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
+                  A
+                </div>
+                <span className="text-xs font-semibold text-slate-300 hidden xl:block">Alex M.</span>
+              </button>
+            </NavLink>
 
             <div className="h-5 w-px bg-slate-800 mx-0.5 hidden sm:block" />
 
@@ -174,7 +271,6 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
       </header>
 
       {/* 3. MOBILE MENU PANEL CONTAINER */}
-      {/* Toggles open smoothly via Tailwind CSS Max-Height transitions */}
       <div 
         className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-slate-900 border-slate-800 ${
           isMobileMenuOpen ? 'max-h-80 border-b px-4 py-3 shadow-2xl' : 'max-h-0'
