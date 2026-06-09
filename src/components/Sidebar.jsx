@@ -5,6 +5,8 @@ import {
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import AuthPage from '../pages/AuthPage';
+import { useContext } from 'react';
+import { ProductContext } from '../utils/context/ProductApi';
 
 export default function Sidebar({ isOpen, onClose }) {
   
@@ -22,6 +24,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { name: 'Preferences', href: '/preferences', icon: Settings },
     { name: 'Help & Support', href: '/support', icon: HelpCircle },
   ];
+  const { auth } = useContext(ProductContext);
 
   // Helper check to determine which link route is currently active
   const currentPath = window.location.pathname;
@@ -138,7 +141,7 @@ export default function Sidebar({ isOpen, onClose }) {
             className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-red-400 hover:bg-red-950/20 rounded-xl transition-all"
           >
             <LogOut size={16} />
-            <span>{}</span>
+            <span>{auth}</span>
           </button>
           </NavLink>
 

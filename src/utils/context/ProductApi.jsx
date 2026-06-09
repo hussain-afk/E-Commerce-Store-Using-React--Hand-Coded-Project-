@@ -6,14 +6,21 @@ function productProvider({ children }) {
 
     const [products, setProducts] = useState(null)
 
+    // other global states and functions can be added here
+    const [auth, setAuth] = useState('Sign In')
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+
     const getProducts = async () => {
         try {
             const response = await fetch('https://dummyjson.com/products')
             const data = await response.json()
             setProducts(data.products)
+            setLoading(false)
             // console.log(data.products)
         } catch (error) {
-
+            setLoading(false)
         }
     }
     useEffect(() => {
@@ -21,7 +28,7 @@ function productProvider({ children }) {
     }, [])
   
     return (
-        <ProductContext.Provider value={{ products }}>
+        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading }}>
             {children}
         </ProductContext.Provider>
     )

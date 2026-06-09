@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { ProductContext } from '../utils/context/ProductApi';
 import { Mail, Lock, Eye, EyeOff, ShoppingBag, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 // Added GoogleAuthProvider and signInWithPopup from your firebase package
 import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from '../utils/firebase';
 
 export default function EnhancedAuthPage() {
   const [authMode, setAuthMode] = useState('signin');
+  // other states related to form handling and authentication feedback
+  const{ setAuth, setUser } = useContext(ProductContext);
   
 
   const navigate = useNavigate();
@@ -27,6 +31,8 @@ export default function EnhancedAuthPage() {
           // User successfully signed up/in via the redirect route
           console.log('Google Redirect Auth Successful:', result.user);
           navigate('/');
+          setAuth('Sign Out'); // Update auth state to reflect signed-in status
+          setUser(result.user.email.search('@') > -1 ? result.user.email.split('@')[0] : result.user.email); // Update user state with the authenticated user
         }
       })
       .catch((error) => {
@@ -57,8 +63,10 @@ export default function EnhancedAuthPage() {
     setAuthError('');
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
-        console.log('Signed up:', userCredential.user);
+        console.log('Signed up:', userCredential.user.email);
         navigate('/');
+        setAuth('Sign Out');
+        setUser(userCredential.user.email.search('@') > -1 ? userCredential.user.email.split('@')[0] : userCredential.user.email);
       })
       .catch((error) => {
         console.error('Sign up error:', error);
@@ -72,8 +80,10 @@ export default function EnhancedAuthPage() {
     setAuthError('');
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
-        console.log('Signed in:', userCredential.user);
+        console.log('Signed in:', userCredential.user.email);
         navigate('/');
+        setAuth('Sign Out');
+        setUser(userCredential.user.email.search('@') > -1 ? userCredential.user.email.split('@')[0] : userCredential.user.email);
       })
       .catch((error) => {
         console.error('Sign in error:', error);

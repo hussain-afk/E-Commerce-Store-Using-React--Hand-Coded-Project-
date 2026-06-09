@@ -14,7 +14,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   
-  const { products } = useContext(ProductContext);
+  const { products, user } = useContext(ProductContext);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -249,7 +249,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
                   A
                 </div>
-                <span className="text-xs font-semibold text-slate-300 hidden xl:block">Alex M.</span>
+                <span className="text-xs font-semibold text-slate-300 hidden xl:block">{user}</span>
               </button>
             </NavLink>
 
