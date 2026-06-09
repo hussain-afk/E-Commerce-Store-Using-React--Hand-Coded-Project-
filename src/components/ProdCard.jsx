@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 import { ShoppingBag, Star, Heart, ArrowRight } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 function ProdCard() {
   const { products } = useContext(ProductContext);
-  
+
   // Track unique wishlisted item state nodes dynamically
   const [wishlist, setWishlist] = useState({});
 
@@ -14,26 +15,27 @@ function ProdCard() {
 
   return (
     <div className="w-full max-w-[1300px] mx-auto px-4 py-12 text-slate-400">
-      
+
       {/* RESPONSIVE DESIGN CLUSTER GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
-        
+
         {products && products.map((product) => {
           // Dynamic price markdown calculations based on incoming API data fields
           const hasDiscount = product.discountPercentage && product.discountPercentage > 0;
-          const originalPrice = hasDiscount 
+          const originalPrice = hasDiscount
             ? (product.price / (1 - product.discountPercentage / 100)).toFixed(2)
             : null;
 
           return (
-            <div 
-              key={product.id} 
+            <div
+              key={product.id}
               className="w-full max-w-[340px] bg-gradient-to-b from-slate-900/60 to-slate-950/40 border border-slate-900 hover:border-slate-800/80 rounded-2xl p-3.5 transition-all duration-300 group relative flex flex-col justify-between shadow-xl shadow-black/20"
             >
-              
+              <NavLink to={`/products/${product.id}`}>
+
               {/* 1. VISUAL LAYER: THUMBNAIL STORAGE DEPOT */}
               <div className="w-full aspect-square bg-slate-950 rounded-xl border border-slate-900/60 flex items-center justify-center relative overflow-hidden group-hover:border-slate-800/40 transition-colors">
-                
+
                 {hasDiscount && (
                   <span className="absolute top-3 left-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono font-black text-[10px] tracking-tight px-2 py-0.5 rounded-md z-10">
                     -{Math.round(product.discountPercentage)}% OFF
@@ -47,16 +49,16 @@ function ProdCard() {
                   className="absolute top-2.5 right-2.5 p-2 rounded-lg bg-slate-900/80 hover:bg-slate-900 border border-slate-800/60 text-slate-400 hover:text-red-400 transition-all z-10 active:scale-90 focus:outline-none"
                   aria-label="Toggle Registry Favorites"
                 >
-                  <Heart 
-                    size={13} 
-                    className={wishlist[product.id] ? 'fill-red-500 text-red-500' : 'transition-colors'} 
+                  <Heart
+                    size={13}
+                    className={wishlist[product.id] ? 'fill-red-500 text-red-500' : 'transition-colors'}
                   />
                 </button>
 
                 {/* Product Media Source Rendering */}
                 {product.thumbnail ? (
-                  <img 
-                    src={product.thumbnail} 
+                  <img
+                    src={product.thumbnail}
                     alt={product.title}
                     className="w-40 h-40 object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-500 z-10"
                     loading="lazy"
@@ -73,12 +75,12 @@ function ProdCard() {
 
               {/* 2. SPECIFICATIONS LAYER: STRATIFIED TEXT FIELDS */}
               <div className="pt-4 px-1 space-y-3.5 flex-1 flex flex-col justify-between">
-                
+
                 <div className="space-y-1.5 text-left">
                   <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block">
                     {product.category || product.brand || 'System Node'}
                   </span>
-                  
+
                   <h3 className="font-bold text-sm text-white tracking-tight group-hover:text-blue-400 transition-colors leading-tight line-clamp-1">
                     {product.title}
                   </h3>
@@ -90,7 +92,7 @@ function ProdCard() {
 
                 {/* FINANCIAL & EVALUATION METRICS METADATA ROW */}
                 <div className="flex items-center justify-between border-t border-slate-900/60 pt-3">
-                  
+
                   {/* Prices Columns */}
                   <div className="flex items-baseline gap-2 text-left">
                     <span className="font-mono text-base font-black text-white tracking-tight">
@@ -125,12 +127,14 @@ function ProdCard() {
                 </button>
 
               </div>
-
+              </NavLink>
             </div>
+            
           );
         })}
-        
+
       </div>
+
     </div>
   );
 }

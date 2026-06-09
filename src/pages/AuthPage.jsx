@@ -5,7 +5,9 @@ import { Mail, Lock, Eye, EyeOff, ShoppingBag, ArrowRight, Sparkles, CheckCircle
 import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from '../utils/firebase';
 
 export default function EnhancedAuthPage() {
-  const [authMode, setAuthMode] = useState('signin'); // 'signin' or 'signup'
+  const [authMode, setAuthMode] = useState('signin');
+  
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });

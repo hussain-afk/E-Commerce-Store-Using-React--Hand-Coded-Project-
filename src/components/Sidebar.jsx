@@ -4,6 +4,7 @@ import {
   Settings, HelpCircle, LogOut, ArrowRight, X 
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import AuthPage from '../pages/AuthPage';
 
 export default function Sidebar({ isOpen, onClose }) {
   
@@ -137,7 +138,7 @@ export default function Sidebar({ isOpen, onClose }) {
             className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-red-400 hover:bg-red-950/20 rounded-xl transition-all"
           >
             <LogOut size={16} />
-            <span>Sign Out Session</span>
+            <span>{}</span>
           </button>
           </NavLink>
 
