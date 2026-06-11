@@ -6,6 +6,7 @@ import {
 import { NavLink } from 'react-router-dom';
 import AuthPage from '../pages/AuthPage';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductContext } from '../utils/context/ProductApi';
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -24,10 +25,18 @@ export default function Sidebar({ isOpen, onClose }) {
     { name: 'Preferences', href: '/preferences', icon: Settings },
     { name: 'Help & Support', href: '/support', icon: HelpCircle },
   ];
-  const { auth } = useContext(ProductContext);
+  const { auth,setAuth,setUser } = useContext(ProductContext);
 
   // Helper check to determine which link route is currently active
   const currentPath = window.location.pathname;
+  
+  const navigate = useNavigate();
+  const handleSignOut = () => {
+    setAuth('Sign In');
+    setUser(null);
+    navigate('/');
+  }
+
 
   return (
     <>
@@ -137,7 +146,7 @@ export default function Sidebar({ isOpen, onClose }) {
           {/* Core App Session Break Trigger */}
           <NavLink to ="/auth">
             <button 
-            onClick={() => console.log('Log out user...')}
+            onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-red-400 hover:bg-red-950/20 rounded-xl transition-all"
           >
             <LogOut size={16} />

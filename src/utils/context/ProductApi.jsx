@@ -10,6 +10,7 @@ function productProvider({ children }) {
     const [auth, setAuth] = useState('Sign In')
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    
 
 
     const getProducts = async () => {

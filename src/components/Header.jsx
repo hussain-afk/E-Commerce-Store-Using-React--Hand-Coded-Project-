@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShoppingBag, User, Search, Menu, X, Heart, Bell, Flame, ArrowRight, ShieldCheck, Zap, ChevronDown } from 'lucide-react';
+import { ShoppingBag, User, Search, Menu, X, Heart, Bell, Flame, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
@@ -25,13 +25,12 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
       return;
     }
 
-    // Filter products by title or category (adjust fields to match your actual Context API structure)
     const filtered = products?.filter(product =>
       product.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.category?.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
 
-    setSearchResults(filtered.slice(0, 5)); // Limit to top 5 results for clean design
+    setSearchResults(filtered.slice(0, 5));
   }, [searchQuery, products]);
 
   // --- CLOSE DROPDOWN ON CLICK OUTSIDE ---
@@ -49,7 +48,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
     setSearchQuery('');
     setShowDropdown(false);
     setIsMobileSearchOpen(false);
-    navigate(`/products/${productId}`); // Adjust routing pattern if needed
+    navigate(`/products/${productId}`);
   };
 
   const mobileLinks = [
@@ -86,7 +85,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             
             <a href="/" className="text-xl font-black tracking-tight text-white flex items-center gap-2 group select-none">
               <span className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white px-2.5 py-1 rounded-xl text-xs font-black shadow-md shadow-blue-500/20 tracking-wider">
-                NX
+                MHM.DEV
               </span>
               <span className="hidden xs:block font-sans tracking-wide">
                 NEXUS<span className="text-blue-500 font-extrabold">.</span>
@@ -247,9 +246,12 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             <NavLink to='/auth'>
               <button className="p-1 text-slate-400 hover:text-white rounded-full flex items-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-950 pr-3 pl-1 h-9 transition-all" aria-label="User profile config">
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
-                  A
+                  {user ? user.charAt(0).toUpperCase() : 'A'}
                 </div>
-                <span className="text-xs font-semibold text-slate-300 hidden xl:block">{user}</span>
+                {/* CHANGED HERE: Removed hidden xl:block and added max-w constraint + truncate */}
+                <span className="text-xs font-semibold text-slate-300 block max-w-[70px] truncate select-none">
+                  {user}
+                </span>
               </button>
             </NavLink>
 

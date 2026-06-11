@@ -9,8 +9,8 @@ import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signI
 export default function EnhancedAuthPage() {
   const [authMode, setAuthMode] = useState('signin');
   // other states related to form handling and authentication feedback
-  const{ setAuth, setUser } = useContext(ProductContext);
-  
+  const { setAuth, setUser } = useContext(ProductContext);
+
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
