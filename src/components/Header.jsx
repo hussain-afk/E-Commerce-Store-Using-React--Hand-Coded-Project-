@@ -14,7 +14,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   
-  const { products, user } = useContext(ProductContext);
+  const { products, user, cart } = useContext(ProductContext);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -264,7 +264,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               <ShoppingBag size={15} className="transition-transform group-hover:-translate-y-0.5" />
               <span className="hidden sm:inline font-medium">Cart</span>
               <span className="bg-slate-950/40 text-white text-[10px] px-1.5 py-0.5 rounded-md font-black min-w-[18px]">
-                {cartCount}
+                {cart}
               </span>
             </button>
           </div>

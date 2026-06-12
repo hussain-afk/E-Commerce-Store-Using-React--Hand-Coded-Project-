@@ -10,6 +10,7 @@ function productProvider({ children }) {
     const [auth, setAuth] = useState('Sign In')
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [cart, setCart] = useState(0)
     
 
 
@@ -29,7 +30,7 @@ function productProvider({ children }) {
     }, [])
   
     return (
-        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading }}>
+        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart }}>
             {children}
         </ProductContext.Provider>
     )

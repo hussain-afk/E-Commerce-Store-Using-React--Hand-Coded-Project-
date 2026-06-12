@@ -4,7 +4,7 @@ import { ShoppingBag, Star, Heart, ArrowRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 function ProdCard() {
-  const { products } = useContext(ProductContext);
+  const { products, setCart } = useContext(ProductContext);
 
   // Track unique wishlisted item state nodes dynamically
   const [wishlist, setWishlist] = useState({});
@@ -120,7 +120,7 @@ function ProdCard() {
                 </div>
 
                 {/* 3. TRANSACTION CTA INTERACTION ELEMENT */}
-                <button className="w-full mt-0.5 flex items-center justify-center gap-2 bg-slate-900 hover:bg-blue-600 border border-slate-800 hover:border-blue-500 font-bold py-2 rounded-xl text-[11px] tracking-wide text-slate-300 hover:text-white transition-all active:scale-[0.98] group/btn shadow-md shadow-black/10">
+                <button onClick={() => setCart((prev) => prev + 1)} className="w-full mt-0.5 flex items-center justify-center gap-2 bg-slate-900 hover:bg-blue-600 border border-slate-800 hover:border-blue-500 font-bold py-2 rounded-xl text-[11px] tracking-wide text-slate-300 hover:text-white transition-all active:scale-[0.98] group/btn shadow-md shadow-black/10">
                   <ShoppingBag size={12} className="text-slate-500 group-hover/btn:text-white transition-colors" />
                   <span>Add to System Cart</span>
                   <ArrowRight size={10} className="text-slate-600 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all ml-0.5" />
