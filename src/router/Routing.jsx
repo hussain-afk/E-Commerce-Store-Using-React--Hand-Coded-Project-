@@ -1,21 +1,33 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom' 
+// importing pages and components
 import RootLayout from './RootLayout'
 import AuthPage from '../pages/AuthPage'
 import Home from '../pages/Home'
 import ProdDeatailPage from '../pages/ProdDeatailPage'
 import NotFound from '../pages/NotFound'
+import ProfilePage from '../pages/ProfilePage'
+// importing context
+import { useContext } from 'react'
+import { ProductContext } from '../utils/context/ProductApi'
 
 function Routing() {
+  const { user } = useContext(ProductContext)
+  
   return (
     <BrowserRouter>
       <Routes>
+        {/* 404 Catch-all route */}
         <Route path="*" element={<NotFound />} />
+        
+        {/* Layout and nested routes */}
         <Route path="/" element={<RootLayout />} >
           <Route index element={<Home />} />
-          <Route path="/products/:id" element={<ProdDeatailPage />} />
+          <Route path="/products/:id" element={user ? <ProdDeatailPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/profile" element={ <ProfilePage /> } />
         </Route>
-        <Route path="/auth" element={<AuthPage />} />
+        {/* Auth Route: If user exists, redirect to home. Otherwise, show AuthPage */}
+        <Route path="/auth" element={user ? <Navigate to="/profile" replace /> : <AuthPage />} />
       </Routes>
     </BrowserRouter>
   )

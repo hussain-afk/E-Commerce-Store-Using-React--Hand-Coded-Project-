@@ -4,12 +4,12 @@ import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 import { Mail, Lock, Eye, EyeOff, ShoppingBag, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 // Added GoogleAuthProvider and signInWithPopup from your firebase package
-import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from '../utils/firebase';
+import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from '../utils/firebase';
 
 export default function EnhancedAuthPage() {
   const [authMode, setAuthMode] = useState('signin');
   // other states related to form handling and authentication feedback
-  const { setAuth, setUser } = useContext(ProductContext);
+  const { setAuth, setUser, userData, setUserData } = useContext(ProductContext);
 
 
   const navigate = useNavigate();
@@ -24,38 +24,61 @@ export default function EnhancedAuthPage() {
   };
 
   // Google Authentication Handler (Only for Sign Up)
-  useEffect(() => {
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result) {
-          // User successfully signed up/in via the redirect route
-          console.log('Google Redirect Auth Successful:', result.user);
-          navigate('/');
-          setAuth('Sign Out'); // Update auth state to reflect signed-in status
-          setUser(result.user.email.search('@') > -1 ? result.user.email.split('@')[0] : result.user.email); // Update user state with the authenticated user
-        }
-      })
-      .catch((error) => {
-        console.error('Google Redirect Error:', error);
-        setAuthError(error.message || 'Failed to finish Google authentication.');
-      });
-  }, [navigate]);
+  // useEffect(() => {
+  //   getRedirectResult(auth)
+  //     .then((result) => {
+  //       if (result) {
+  //         // User successfully signed up/in via the redirect route
+  //         console.log('Google Redirect Auth Successful:', result.user);
+  //         navigate('/');
+  //         setAuth('Sign Out'); // Update auth state to reflect signed-in status
+  //         setUser(result.user.email.search('@') > -1 ? result.user.email.split('@')[0] : result.user.email); // Update user state with the authenticated user
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error('Google Redirect Error:', error);
+  //       setAuthError(error.message || 'Failed to finish Google authentication.');
+  //     });
+  // }, [navigate]);
 
   // 3. Rewrite the Google button handler to fire a redirect instead of a popup
-  const handleGoogleSignUp = async () => {
-    setIsLoading(true);
-    setAuthError('');
-    const provider = new GoogleAuthProvider();
+ const handleGoogleSignUp = async () => {
+  setIsLoading(true);
+  setAuthError('');
+  const provider = new GoogleAuthProvider();
 
-    try {
-      // Bypasses the COOP security block entirely
-      await signInWithRedirect(auth, provider);
-    } catch (error) {
-      console.error('Google Initialization Error:', error);
-      setAuthError(error.message || 'Failed to initialize Google login.');
-      setIsLoading(false);
+  try {
+    const result = await signInWithPopup(auth, provider);
+    
+    // The signed-in user info.
+    const user = result.user;
+    
+    console.log('Google Sign-Up Successful:', user);
+    
+    // Update State
+    setAuth('Sign Out');
+    setUser(user.email?.includes('@') ? user.email.split('@')[0] : user.email);
+    setUserData(user);
+    
+    // Navigate after state is set
+    navigate('/');
+
+  } catch (error) {
+    console.error('Google Sign-Up Error:', error);
+    
+    // Handle specific Firebase error codes
+    if (error.code === 'auth/popup-closed-by-user') {
+      setAuthError('Sign-in cancelled. Please try again.');
+    } else if (error.code === 'auth/cancelled-popup-request') {
+      setAuthError('Request already in progress.');
+    } else {
+      setAuthError(error.message || 'Failed to sign in with Google.');
     }
-  };
+  } finally {
+    // This runs whether the login succeeds or fails
+    setIsLoading(false);
+  }
+};
 
   // Firebase Authentication Handlers
   const handleSignUp = async () => {
@@ -223,6 +246,7 @@ export default function EnhancedAuthPage() {
 
           {/* INPUT FORM BLOCK */}
           <form onSubmit={handleSubmit} className="space-y-4">
+
 
             {/* Input 1: Email */}
             <div>

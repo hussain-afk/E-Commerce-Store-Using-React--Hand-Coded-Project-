@@ -9,6 +9,7 @@ function productProvider({ children }) {
     // other global states and functions can be added here
     const [auth, setAuth] = useState('Sign In')
     const [user, setUser] = useState(null)
+    const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [cart, setCart] = useState(0)
     
@@ -30,7 +31,7 @@ function productProvider({ children }) {
     }, [])
   
     return (
-        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart }}>
+        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData }}>
             {children}
         </ProductContext.Provider>
     )
