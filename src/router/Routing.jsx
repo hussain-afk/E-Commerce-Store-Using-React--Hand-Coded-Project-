@@ -7,6 +7,7 @@ import Home from '../pages/Home'
 import ProdDeatailPage from '../pages/ProdDeatailPage'
 import NotFound from '../pages/NotFound'
 import ProfilePage from '../pages/ProfilePage'
+import Cart from '../pages/CartPage'
 // importing context
 import { useContext } from 'react'
 import { ProductContext } from '../utils/context/ProductApi'
@@ -25,6 +26,7 @@ function Routing() {
           <Route index element={<Home />} />
           <Route path="/products/:id" element={user ? <ProdDeatailPage /> : <Navigate to="/auth" replace />} />
           <Route path="/profile" element={ <ProfilePage /> } />
+          <Route path="/cart" element={ user ? <Cart /> : <Navigate to="/auth" replace /> } />
         </Route>
         {/* Auth Route: If user exists, redirect to home. Otherwise, show AuthPage */}
         <Route path="/auth" element={user ? <Navigate to="/profile" replace /> : <AuthPage />} />

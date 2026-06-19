@@ -12,16 +12,11 @@ export default function Sidebar({ isOpen, onClose }) {
   // Custom navigation structure divided into semantic sections
   const discoverLinks = [
     { name: 'Dashboard', href: '/', icon: Home },
-    { name: 'Browse Shop', href: '/shop', icon: Grid },
-    { name: 'New Drops', href: '/new', icon: Flame, badge: 'Hot' },
-    { name: 'My Wishlist', href: '/wishlist', icon: Heart },
-    { name: 'Order History', href: '/orders', icon: History },
+    { name: 'my Collection', href: '/cart', icon: Grid },
   ];
 
   const accountLinks = [
     { name: 'Profile Settings', href: '/profile', icon: User },
-    { name: 'Preferences', href: '/preferences', icon: Settings },
-    { name: 'Help & Support', href: '/support', icon: HelpCircle },
   ];
   const { auth, setAuth, setUser } = useContext(ProductContext);
 

@@ -52,9 +52,10 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
   };
 
   const mobileLinks = [
+    { name: 'Dashboard', href: '/' },
     { name: 'Shop All', href: '/shop' },
     { name: 'New Drops', href: '/new' },
-    { name: 'The Vault', href: '/vault' },
+    { name: 'The Vault', href: '/cart' },
     { name: 'Clearance Sale', href: '/sale', highlight: true }
   ];
 
@@ -83,14 +84,14 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               {isMobileMenuOpen ? <X size={22} className="text-sky-400" /> : <Menu size={22} />}
             </button>
             
-            <a href="/" className="text-xl font-black tracking-tight text-white flex items-center gap-2 group select-none">
+            <NavLink to="/" className="text-xl font-black tracking-tight text-white flex items-center gap-2 group select-none">
               <span className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white px-2.5 py-1 rounded-xl text-xs font-black shadow-md shadow-blue-500/20 tracking-wider">
                 MHM.DEV
               </span>
               <span className="hidden xs:block font-sans tracking-wide">
                 NEXUS<span className="text-blue-500 font-extrabold">.</span>
               </span>
-            </a>
+            </NavLink>
           </div>
 
           {/* DESKTOP NAVIGATION */}
@@ -126,9 +127,9 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               )}
             </div>
 
-            <a href="/new" className="hover:text-white transition-colors">New Drops</a>
-            <a href="/vault" className="hover:text-white transition-colors">The Vault</a>
-            <a href="/sale" className="text-red-400 hover:text-red-300 font-semibold transition-colors">Clearance</a>
+            <NavLink to="/new" className="hover:text-white transition-colors">New Drops</NavLink>
+            <NavLink to="/cart" className="hover:text-white transition-colors">The Vault</NavLink>
+            <NavLink to="/sale" className="text-red-400 hover:text-red-300 font-semibold transition-colors">Clearance</NavLink>
           </nav>
 
           {/* --- INTERACTIVE DESKTOP SEARCH --- */}
@@ -257,7 +258,8 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
 
             <div className="h-5 w-px bg-slate-800 mx-0.5 hidden sm:block" />
 
-            <button 
+            <NavLink to='/cart'>
+              <button 
               className="flex items-center gap-2 bg-gradient-to-b from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-3.5 h-9 rounded-xl text-xs font-bold shadow-lg shadow-blue-600/20 transition-all group"
               aria-label="Shopping Cart"
             >
@@ -267,6 +269,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
                 {cart}
               </span>
             </button>
+            </NavLink>
           </div>
 
         </div>
@@ -280,9 +283,9 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
       >
         <div className="space-y-1">
           {mobileLinks.map((link) => (
-            <a
+            <NavLink
               key={link.name}
-              href={link.href}
+              to={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
               className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 link.highlight
@@ -291,7 +294,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               }`}
             >
               {link.name}
-            </a>
+            </NavLink>
           ))}
           
           <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400">
