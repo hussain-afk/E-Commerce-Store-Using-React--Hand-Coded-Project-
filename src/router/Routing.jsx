@@ -25,7 +25,7 @@ function Routing() {
         <Route path="/" element={<RootLayout />} >
           <Route index element={<Home />} />
           <Route path="/products/:id" element={user ? <ProdDeatailPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/profile/:displayName" element={ <ProfilePage /> } />
+          <Route path="/profile/:displayName" element={ user ? <ProfilePage /> : <Navigate to="/auth" replace /> } />
           <Route path="/cart" element={ user ? <Cart /> : <Navigate to="/auth" replace /> } />
         </Route>
         {/* Auth Route: If user exists, redirect to home. Otherwise, show AuthPage */}
