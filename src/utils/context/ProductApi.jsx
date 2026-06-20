@@ -29,9 +29,13 @@ function productProvider({ children }) {
     useEffect(() => {
         getProducts()
     }, [])
-  
+
+    function refreshProducts() {
+       getProducts()  
+       console.log('Products refreshed!')
+    }
     return (
-        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData }}>
+        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts }}>
             {children}
         </ProductContext.Provider>
     )
