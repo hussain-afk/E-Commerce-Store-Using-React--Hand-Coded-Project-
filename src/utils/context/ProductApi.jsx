@@ -12,6 +12,7 @@ function productProvider({ children }) {
     const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [cart, setCart] = useState(0)
+    const [profileUrl, setProfileUrl] = useState(null)
     
 
 
@@ -32,10 +33,10 @@ function productProvider({ children }) {
 
     function refreshProducts() {
        getProducts()  
-       console.log('Products refreshed!')
+    //    console.log('Products refreshed!')
     }
     return (
-        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts }}>
+        <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl }}>
             {children}
         </ProductContext.Provider>
     )

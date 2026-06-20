@@ -1,16 +1,18 @@
 import React, { useContext } from 'react'
 import { ProductContext } from '../utils/context/ProductApi'
-import { replace, useNavigate } from 'react-router-dom';
+import { replace, useNavigate, useParams } from 'react-router-dom';
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { userData , setAuth, setUser } = useContext(ProductContext)
+  const { userData , setAuth, setUser, profileUrl, setProfileUrl } = useContext(ProductContext)
 
   const handleSignOut = () => {
     setAuth('Sign In');
     setUser(null);
+    setProfileUrl(null);
     navigate('/');
   }
+  // const { displayName } = useParams();
 
   // 💎 BEAST MODE SKELETON LOADING STATE
   if (!userData) {

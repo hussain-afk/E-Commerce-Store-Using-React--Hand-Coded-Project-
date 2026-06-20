@@ -9,7 +9,7 @@ import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signI
 export default function EnhancedAuthPage() {
   const [authMode, setAuthMode] = useState('signin');
   // other states related to form handling and authentication feedback
-  const { setAuth, setUser, userData, setUserData } = useContext(ProductContext);
+  const { setAuth, setUser, userData, setUserData, setProfileUrl } = useContext(ProductContext);
 
 
   const navigate = useNavigate();
@@ -52,6 +52,8 @@ export default function EnhancedAuthPage() {
     
     // The signed-in user info.
     const user = result.user;
+    setProfileUrl(user.displayName);
+
     
     console.log('Google Sign-Up Successful:', user);
     

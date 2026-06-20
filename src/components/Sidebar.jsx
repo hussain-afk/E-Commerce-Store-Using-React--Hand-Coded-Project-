@@ -8,6 +8,8 @@ import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 
 export default function Sidebar({ isOpen, onClose }) {
+  const { auth, setAuth, setUser, profileUrl, setProfileUrl } = useContext(ProductContext);
+
 
   // Custom navigation structure divided into semantic sections
   const discoverLinks = [
@@ -16,9 +18,8 @@ export default function Sidebar({ isOpen, onClose }) {
   ];
 
   const accountLinks = [
-    { name: 'Profile Settings', href: '/profile', icon: User },
+    { name: 'Profile Settings', href: `/profile/${profileUrl}`, icon: User },
   ];
-  const { auth, setAuth, setUser } = useContext(ProductContext);
 
   // Helper check to determine which link route is currently active
   const currentPath = useLocation().pathname;
@@ -27,6 +28,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const handleSignOut = () => {
     setAuth('Sign In');
     setUser(null);
+    setProfileUrl(null);
     navigate('/auth');
   }
 
@@ -69,8 +71,8 @@ export default function Sidebar({ isOpen, onClose }) {
                       to={link.href}
                       onClick={onClose}
                       className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all group ${isActive
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/10'
-                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/10'
+                        : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                         }`}
                     >
                       <div className="flex items-center gap-3">
@@ -103,8 +105,8 @@ export default function Sidebar({ isOpen, onClose }) {
                       to={link.href}
                       onClick={onClose}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all group ${isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                         }`}
                     >
                       <Icon size={16} className={isActive ? 'text-white' : 'text-slate-400 group-hover:text-blue-400 transition-colors'} />

@@ -13,7 +13,7 @@ import { useContext } from 'react'
 import { ProductContext } from '../utils/context/ProductApi'
 
 function Routing() {
-  const { user } = useContext(ProductContext)
+  const { user, profileUrl } = useContext(ProductContext)
   
   return (
     <BrowserRouter>
@@ -25,11 +25,11 @@ function Routing() {
         <Route path="/" element={<RootLayout />} >
           <Route index element={<Home />} />
           <Route path="/products/:id" element={user ? <ProdDeatailPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/profile" element={ <ProfilePage /> } />
+          <Route path="/profile/:displayName" element={ <ProfilePage /> } />
           <Route path="/cart" element={ user ? <Cart /> : <Navigate to="/auth" replace /> } />
         </Route>
         {/* Auth Route: If user exists, redirect to home. Otherwise, show AuthPage */}
-        <Route path="/auth" element={user ? <Navigate to="/profile" replace /> : <AuthPage />} />
+        <Route path="/auth" element={user ? <Navigate to={`/profile/${profileUrl}`} replace /> : <AuthPage />} />
       </Routes>
     </BrowserRouter>
   )
