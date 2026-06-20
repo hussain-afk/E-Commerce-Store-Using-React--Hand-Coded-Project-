@@ -13,10 +13,6 @@ A high-performance, fully responsive e-commerce web application engineered with 
         <p align="center"><strong>🖥️ Desktop Storefront Console</strong></p>
         <img src="./src/assets/preview.jpeg" alt="Desktop Storefront Dashboard" width="100%" style="border-radius: 12px; border: 1px solid #1e293b; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5);"/>
       </td>
-      <td valign="top" width="35%">
-        <p align="center"><strong>📱 Mobile Responsive View</strong></p>
-        <img src="image_cc2043.png" alt="Mobile System Layout" width="100%" style="border-radius: 16px; border: 1px solid #1e293b; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5);"/>
-      </td>
     </tr>
   </table>
 </div>
