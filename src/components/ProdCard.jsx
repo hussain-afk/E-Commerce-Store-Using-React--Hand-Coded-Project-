@@ -8,7 +8,7 @@ import { addToCart } from '../store/reducers/CartSlice';
 function ProdCard() {
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
-  const { products, refreshProducts } = useContext(ProductContext);
+  const { products, refreshProducts, setCart, user } = useContext(ProductContext);
 
   // Dynamic local state nodes for clean UI feedback mechanics
   const [wishlist, setWishlist] = useState({});
@@ -23,7 +23,7 @@ function ProdCard() {
   const handleAddToCart = (e, product) => {
     e.preventDefault();
     dispatch(addToCart(product));
-    
+    setCart(prev => prev + 1);
     // Provide isolated micro-feedback animation node on click
     setAddingId(product.id);
     setTimeout(() => setAddingId(null), 1200);
@@ -182,7 +182,7 @@ function ProdCard() {
               <div className="mt-4">
                 <button 
                   type="button"
-                  onClick={(e) => handleAddToCart(e, product)} 
+                  onClick={user ? (e) => handleAddToCart(e, product) : undefined} 
                   disabled={isAdding}
                   className={`w-full flex items-center justify-center gap-2 border font-bold py-2.5 rounded-xl text-[11px] tracking-wide transition-all active:scale-[0.98] group/btn shadow-md ${
                     isAdding 
@@ -190,7 +190,7 @@ function ProdCard() {
                       : "bg-slate-900 hover:bg-blue-600 border-slate-800 hover:border-blue-500 text-slate-300 hover:text-white"
                   }`}
                 >
-                  {isAdding ? (
+                  { user && isAdding ? (
                     <>
                       <Check size={12} className="text-emerald-400 animate-bounce" />
                       <span>Added to Core System</span>

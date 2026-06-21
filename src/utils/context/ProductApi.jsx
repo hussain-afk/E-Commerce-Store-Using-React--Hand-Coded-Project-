@@ -11,7 +11,9 @@ function productProvider({ children }) {
     const [user, setUser] = useState(null)
     const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(true)
+    // cart Counting
     const [cart, setCart] = useState(0)
+    // url name for profile page
     const [profileUrl, setProfileUrl] = useState(null)
     
 

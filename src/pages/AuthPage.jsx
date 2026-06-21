@@ -55,7 +55,7 @@ export default function EnhancedAuthPage() {
     setProfileUrl(user.displayName);
 
     
-    console.log('Google Sign-Up Successful:', user);
+    // console.log('Google Sign-Up Successful:', user);
     
     // Update State
     setAuth('Sign Out');

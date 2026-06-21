@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAFemyy8c7ujDr1TLMoq6jZI1cw5p9N_7s",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "smit-assignment-a0b13.firebaseapp.com",
   projectId: "smit-assignment-a0b13",
   storageBucket: "smit-assignment-a0b13.firebasestorage.app",
