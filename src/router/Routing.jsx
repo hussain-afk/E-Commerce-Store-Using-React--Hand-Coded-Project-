@@ -11,10 +11,12 @@ import Cart from '../pages/CartPage'
 // importing context
 import { useContext } from 'react'
 import { ProductContext } from '../utils/context/ProductApi'
+// import { ToastContext } from '../utils/context/ToastContext'
 
 function Routing() {
   const { user, profileUrl } = useContext(ProductContext)
   
+
   return (
     <BrowserRouter>
       <Routes>
@@ -24,7 +26,7 @@ function Routing() {
         {/* Layout and nested routes */}
         <Route path="/" element={<RootLayout />} >
           <Route index element={<Home />} />
-          <Route path="/products/:id" element={user ? <ProdDeatailPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/products/:id" element={user ? <ProdDeatailPage /> : <Navigate to="/auth" replace /> } />
           <Route path="/profile/:displayName" element={ user ? <ProfilePage /> : <Navigate to="/auth" replace /> } />
           <Route path="/cart" element={ user ? <Cart /> : <Navigate to="/auth" replace /> } />
         </Route>

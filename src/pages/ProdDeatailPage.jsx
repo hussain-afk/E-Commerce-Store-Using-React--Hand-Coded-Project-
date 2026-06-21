@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ProductContext } from '../utils/context/ProductApi';
+import { ToastContext } from '../utils/context/ToastContext'
 import { ShoppingBag, Star, Heart, ArrowLeft, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/reducers/CartSlice';
@@ -8,7 +9,8 @@ import { addToCart } from '../store/reducers/CartSlice';
 function ProdDeatailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products, cartData, setCartData } = useContext(ProductContext);
+  const { products, cartData, setCartData, setCart } = useContext(ProductContext);
+  const { showToast } = useContext(ToastContext);
   const dispatch = useDispatch();
 
   // Track selected active image from the product's image directory array
@@ -25,6 +27,13 @@ function ProdDeatailPage() {
       setActiveImg(product.thumbnail);
     }
   }, [product]);
+
+  function handleAddToCart() {
+    dispatch(addToCart(product));
+    showToast(`${product.title} has been added to your system cart!`, 'success');
+    // Optionally, you can also update local cart data if needed
+    setCart((prevCart) => prevCart + 1);
+  }
 
   // Handle the initial context pipeline downloading layout state
   if (!products) {
@@ -217,7 +226,7 @@ function ProdDeatailPage() {
                 </button>
 
                 {/* Primary Add To Cart Submission Component */}
-                <button onClick={()=>dispatch(addToCart(product))} className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-gradient-to-b from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-black text-white text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl shadow-xl shadow-blue-950/50 transition-all active:scale-[0.98]">
+                <button onClick={handleAddToCart} className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-gradient-to-b from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-black text-white text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl shadow-xl shadow-blue-950/50 transition-all active:scale-[0.98]">
                   <ShoppingBag size={14} />
                   <span>Deploy to Cart</span>
                 </button>

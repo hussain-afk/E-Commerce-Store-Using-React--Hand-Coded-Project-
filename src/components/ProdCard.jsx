@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
+import { ToastContext } from '../utils/context/ToastContext'
 import { ShoppingBag, Star, Heart, ArrowRight, Check } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,6 +10,7 @@ function ProdCard() {
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
   const { products, refreshProducts, setCart, user } = useContext(ProductContext);
+  const { showToast } = useContext(ToastContext);
 
   // Dynamic local state nodes for clean UI feedback mechanics
   const [wishlist, setWishlist] = useState({});
@@ -24,6 +26,7 @@ function ProdCard() {
     e.preventDefault();
     dispatch(addToCart(product));
     setCart(prev => prev + 1);
+    showToast(`${product.title} has been added to your system cart!`, 'success');
     // Provide isolated micro-feedback animation node on click
     setAddingId(product.id);
     setTimeout(() => setAddingId(null), 1200);
@@ -182,7 +185,7 @@ function ProdCard() {
               <div className="mt-4">
                 <button 
                   type="button"
-                  onClick={user ? (e) => handleAddToCart(e, product) : undefined} 
+                  onClick={user ? (e) => handleAddToCart(e, product) : () => showToast('Please log in to add items to your system cart.', 'info')} 
                   disabled={isAdding}
                   className={`w-full flex items-center justify-center gap-2 border font-bold py-2.5 rounded-xl text-[11px] tracking-wide transition-all active:scale-[0.98] group/btn shadow-md ${
                     isAdding 

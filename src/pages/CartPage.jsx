@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { ProductContext } from '../utils/context/ProductApi'
+import { ToastContext } from '../utils/context/ToastContext'
 import { useSelector, useDispatch } from 'react-redux'
 import { addToCart, removeFromCart, updateQuantity } from '../store/reducers/CartSlice' 
 import { NavLink } from 'react-router-dom';
@@ -12,6 +14,9 @@ function CartPage() {
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
+  // context
+  const { setCart } = useContext(ProductContext);
+  const { showToast } = useContext(ToastContext);
 
   // --- FIXED: Calculated using item.qty ---
   const totalItemsCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -34,6 +39,12 @@ function CartPage() {
       setPromoApplied(false);
     }
   };
+
+  function handleRemoveItem(id) {
+    dispatch(removeFromCart(id));
+    setCart(prev => Math.max(0, prev - 1));
+    showToast('Item removed from your system cart.', 'info');
+  }
 
   // Empty State Guard
   if (cart.length === 0) {
@@ -124,7 +135,7 @@ function CartPage() {
 
                   {/* Absolute Deletion */}
                   <button 
-                    onClick={() => dispatch(removeFromCart(item.id))}
+                    onClick={() => handleRemoveItem(item.id)}
                     className="text-xs font-semibold text-rose-400 hover:text-rose-300 p-2 hover:bg-rose-950/30 rounded-lg transition"
                   >
                     Remove
