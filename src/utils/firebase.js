@@ -1,9 +1,10 @@
 import { initializeApp } from "firebase/app";
 // import { getFirestore, doc, setDoc, collection, addDoc, getDocs } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+const API_KEY = import.meta.env.VITE_FIREBASE_API_KEY;
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: API_KEY,
   authDomain: "smit-assignment-a0b13.firebaseapp.com",
   projectId: "smit-assignment-a0b13",
   storageBucket: "smit-assignment-a0b13.firebasestorage.app",
