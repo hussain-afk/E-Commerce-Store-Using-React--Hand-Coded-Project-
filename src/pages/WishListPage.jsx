@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeFromWishlist, clearWishlist } from '../store/reducers/wishlistSlice';
 import { NavLink, useParams } from 'react-router-dom';
 // Assuming you have a cart slice to handle "Move to Cart"
-import { addToCart } from '../store/reducers/cartSlice';
+import { addToCart } from '../store/reducers/CartSlice';
 
 function WishListPage() {
     const { setCart } = useContext(ProductContext);
