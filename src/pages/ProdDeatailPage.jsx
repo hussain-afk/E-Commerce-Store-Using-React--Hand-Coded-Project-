@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, } from 'react-router-dom';
 import { ProductContext } from '../utils/context/ProductApi';
 import { ToastContext } from '../utils/context/ToastContext'
 import { ShoppingBag, Star, Heart, ArrowLeft, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/reducers/CartSlice';
+import { addToWishlist } from '../store/reducers/wishlistSlice';
 
 function ProdDeatailPage() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ function ProdDeatailPage() {
   // Track selected active image from the product's image directory array
   const [activeImg, setActiveImg] = useState('');
   const [isWishlisted, setIsWishlisted] = useState(false);
+  // const {id} = useParams();
 
   const product = products?.find((item) => item.id === Number(id));
 
@@ -218,7 +220,15 @@ function ProdDeatailPage() {
                 {/* Wishlist Icon Button */}
                 <button
                   type="button"
-                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  onClick={() => {
+                    if (!isWishlisted) {
+                      dispatch(addToWishlist(product));
+                      showToast(`${product.title} has been added to your wishlist!`, 'success');
+                    } else {
+                      // Optionally, you can implement a remove from wishlist action here
+                      showToast(`${product.title} is already in your wishlist.`, 'info');
+                    }
+                  }}
                   className="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-400 hover:text-red-400 rounded-xl transition-all active:scale-95"
                   aria-label="Save product element"
                 >

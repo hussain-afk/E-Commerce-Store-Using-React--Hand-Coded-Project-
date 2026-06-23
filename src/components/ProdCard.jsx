@@ -2,24 +2,31 @@ import React, { useContext, useState } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 import { ToastContext } from '../utils/context/ToastContext'
 import { ShoppingBag, Star, Heart, ArrowRight, Check } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../store/reducers/CartSlice';
+import { addToWishlist, removeFromWishlist } from '../store/reducers/wishlistSlice';
 
 function ProdCard() {
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  // console.log('Current Wishlist State:', wishlist);
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
   const { products, refreshProducts, setCart, user } = useContext(ProductContext);
   const { showToast } = useContext(ToastContext);
 
   // Dynamic local state nodes for clean UI feedback mechanics
-  const [wishlist, setWishlist] = useState({});
   const [addingId, setAddingId] = useState(null);
+  const Navigate = useNavigate();
 
   const toggleWishlist = (e, id) => {
     e.preventDefault(); 
     e.stopPropagation();
-    setWishlist(prev => ({ ...prev, [id]: !prev[id] }));
+    dispatch(wishlist[id] ? removeFromWishlist(id) : addToWishlist(products.find(p => p.id === id)));
+    // Navigate(`/wishlist`); // Navigate to wishlist page after toggling
+    showToast(wishlist[id] ? 'Item removed from wishlist.' : 'Item added to wishlist!', wishlist[id] ? 'info' : 'success');
+    // Implementation for toggling wishlist would go here
+
   };
 
   const handleAddToCart = (e, product) => {
@@ -113,11 +120,12 @@ function ProdCard() {
                   {/* Heart Toggle Switch (Isolated Event Bubbling) */}
                   <button
                     type="button"
-                    onClick={(e) => toggleWishlist(e, product.id)}
+                    onClick={user ? (e) => toggleWishlist(e, product.id) : () => showToast('Please log in to manage your wishlist.', 'info')}
                     className="absolute top-2.5 right-2.5 p-2 rounded-lg bg-slate-900/80 hover:bg-slate-900 border border-slate-800/60 text-slate-400 hover:text-red-400 transition-all z-20 active:scale-90 focus:outline-none"
                     aria-label="Toggle Registry Favorites"
                   >
                     <Heart
+                      // onClick={user ? (e) => toggleWishlist(e, product.id) : () => showToast('Please log in to manage your wishlist.', 'info')}
                       size={13}
                       className={wishlist[product.id] ? 'fill-red-500 text-red-500 scale-110 transition-transform' : 'transition-colors'}
                     />

@@ -10,7 +10,7 @@ function ToastProvider({ children }) {
         setToast({ show: true, message, type });
         setTimeout(() => {
             setToast({ show: false, message: '', type: '' });
-        }, 2000);
+        }, 3000);
     }
 
     // 2. Create a function to clear it when clicked

@@ -56,6 +56,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
     { name: 'Shop All', href: '/shop' },
     { name: 'New Drops', href: '/new' },
     { name: 'The Vault', href: '/cart' },
+    { name: 'Wishlist', href: '/wishlist' },
     { name: 'Clearance Sale', href: '/sale', highlight: true }
   ];
 
@@ -240,9 +241,11 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full ring-2 ring-slate-900 animate-pulse" />
             </button>
 
-            <button className="p-2 text-slate-400 hover:text-white rounded-xl hidden sm:block hover:bg-slate-800/40 transition-colors" aria-label="Favorites">
+            <NavLink to={'/wishlist'}>
+              <button className="p-2 text-slate-400 hover:text-white rounded-xl hidden sm:block hover:bg-slate-800/40 transition-colors" aria-label="Favorites">
               <Heart size={18} />
             </button>
+            </NavLink>
 
             <NavLink to='/auth'>
               <button className="p-1 text-slate-400 hover:text-white rounded-full flex items-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-950 pr-3 pl-1 h-9 transition-all" aria-label="User profile config">
