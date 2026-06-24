@@ -16,6 +16,7 @@ function productProvider({ children }) {
     const [loading, setLoading] = useState(true)
     // cart Counting
     const [cart, setCart] = useState(0)
+    const [wishlist, setWishlist] = useState(0)
     // url name for profile page
     const [profileUrl, setProfileUrl] = useState(null)
     // toast
@@ -45,7 +46,7 @@ function productProvider({ children }) {
     }
     return (
         <>
-            <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl }}>
+            <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl, wishlist, setWishlist }}>
                 {children}
             </ProductContext.Provider>
 

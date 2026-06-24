@@ -4,17 +4,17 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 
-export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
+export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // --- SEARCH STATES ---
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  
-  const { products, user, cart } = useContext(ProductContext);
+
+  const { products, user, cart, wishlist } = useContext(ProductContext);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -62,7 +62,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
 
   return (
     <div className="w-full sticky top-0 z-50">
-      
+
       {/* 1. TOP ANNOUNCEMENT TICKER */}
       <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-blue-900 text-white text-xs py-2 px-4 flex items-center justify-center gap-2 font-medium tracking-wide border-b border-blue-600/20 shadow-inner">
         <Flame size={14} className="text-amber-400 animate-bounce" />
@@ -73,10 +73,10 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
       {/* 2. MAIN GLASSMORPHISM NAV BAR */}
       <header className="h-16 w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 transition-all duration-300">
         <div className="h-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-          
+
           {/* MOBILE NAV TOGGLE & BRAND LOGO */}
           <div className={`items-center gap-2 ${isMobileSearchOpen ? 'hidden md:flex' : 'flex'}`}>
-            <button 
+            <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 -ml-2 text-slate-400 hover:text-white lg:hidden rounded-xl hover:bg-slate-800/40 transition-all focus:outline-none"
               aria-label="Toggle Navigation links"
@@ -84,7 +84,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             >
               {isMobileMenuOpen ? <X size={22} className="text-sky-400" /> : <Menu size={22} />}
             </button>
-            
+
             <NavLink to="/" className="text-xl font-black tracking-tight text-white flex items-center gap-2 group select-none">
               <span className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white px-2.5 py-1 rounded-xl text-xs font-black shadow-md shadow-blue-500/20 tracking-wider">
                 MHM.DEV
@@ -97,7 +97,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
 
           {/* DESKTOP NAVIGATION */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-400">
-            <div 
+            <div
               className="relative py-5"
               onMouseEnter={() => setIsMegaMenuOpen(true)}
               onMouseLeave={() => setIsMegaMenuOpen(false)}
@@ -107,7 +107,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
                 <div className="absolute top-[60px] -left-12 w-[540px] bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl shadow-black/80 grid grid-cols-2 gap-6">
                   <div>
                     <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                      <Zap size={12}/> Apparel Hardware
+                      <Zap size={12} /> Apparel Hardware
                     </h4>
                     <div className="space-y-2 text-slate-300">
                       <a href="/shop/outerwear" className="block text-sm hover:text-white transition-all">Heavy Jackets</a>
@@ -117,7 +117,7 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                      <ShieldCheck size={12}/> Curated Gear
+                      <ShieldCheck size={12} /> Curated Gear
                     </h4>
                     <div className="space-y-2 text-slate-300">
                       <a href="/shop/bags" className="block text-sm hover:text-white transition-all">Waterproof Bags</a>
@@ -137,15 +137,15 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
           <div ref={dropdownRef} className="hidden md:flex flex-1 max-w-sm lg:max-w-md relative mx-2">
             <div className="relative flex items-center w-full rounded-xl border border-slate-800 bg-slate-950 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all duration-200 group">
               <Search className="absolute left-3.5 text-slate-500 group-focus-within:text-blue-400 transition-colors" size={16} />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setShowDropdown(true);
                 }}
                 onFocus={() => setShowDropdown(true)}
-                placeholder="Search premium products..." 
+                placeholder="Search premium products..."
                 className="w-full bg-transparent py-2 pl-10 pr-4 text-xs text-slate-200 placeholder-slate-500 focus:outline-none rounded-xl"
               />
               {searchQuery && (
@@ -183,16 +183,16 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             <div className="absolute inset-x-4 md:hidden flex items-center gap-2 bg-slate-900/95 backdrop-blur-md h-full animate-in fade-in zoom-in-95 duration-150 z-50">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 text-slate-500 top-1/2 -translate-y-1/2" size={16} />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   autoFocus
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..." 
+                  placeholder="Search products..."
                   className="w-full bg-transparent border border-slate-800 bg-slate-950 rounded-xl py-2 pl-10 pr-4 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                 />
               </div>
-              <button 
+              <button
                 onClick={() => {
                   setIsMobileSearchOpen(false);
                   setSearchQuery('');
@@ -224,13 +224,13 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
 
           {/* UTILITY CORE ACTIONS & QUICK ACCOUNTS */}
           <div className={`items-center gap-1 sm:gap-2.5 ${isMobileSearchOpen ? 'hidden md:flex' : 'flex'}`}>
-            
-            <button 
+
+            <button
               onClick={() => {
                 setIsMobileSearchOpen(true);
-                setIsMobileMenuOpen(false); 
+                setIsMobileMenuOpen(false);
               }}
-              className="p-2 text-slate-400 hover:text-white rounded-xl md:hidden hover:bg-slate-800/40" 
+              className="p-2 text-slate-400 hover:text-white rounded-xl md:hidden hover:bg-slate-800/40"
               aria-label="Search"
             >
               <Search size={18} />
@@ -241,10 +241,22 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full ring-2 ring-slate-900 animate-pulse" />
             </button>
 
-            <NavLink to={'/wishlist'}>
-              <button className="p-2 text-slate-400 hover:text-white rounded-xl hidden sm:block hover:bg-slate-800/40 transition-colors" aria-label="Favorites">
-              <Heart size={18} />
-            </button>
+            <NavLink to="/wishlist">
+              <button
+                className="relative p-2 text-slate-400 hover:text-white rounded-xl hidden sm:block hover:bg-slate-800/40 transition-colors"
+                aria-label="Favorites"
+              >
+                <Heart size={18} />
+
+                {
+                  <span
+                    className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold leading-none"
+                  >
+                    {/* {wishlist.length} */}
+                    {wishlist}
+                  </span>
+                }
+              </button>
             </NavLink>
 
             <NavLink to='/auth'>
@@ -262,16 +274,16 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
             <div className="h-5 w-px bg-slate-800 mx-0.5 hidden sm:block" />
 
             <NavLink to='/cart'>
-              <button 
-              className="flex items-center gap-2 bg-gradient-to-b from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-3.5 h-9 rounded-xl text-xs font-bold shadow-lg shadow-blue-600/20 transition-all group"
-              aria-label="Shopping Cart"
-            >
-              <ShoppingBag size={15} className="transition-transform group-hover:-translate-y-0.5" />
-              <span className="hidden sm:inline font-medium">Cart</span>
-              <span className="bg-slate-950/40 text-white text-[10px] px-1.5 py-0.5 rounded-md font-black min-w-[18px]">
-                {cart}
-              </span>
-            </button>
+              <button
+                className="flex items-center gap-2 bg-gradient-to-b from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-3.5 h-9 rounded-xl text-xs font-bold shadow-lg shadow-blue-600/20 transition-all group"
+                aria-label="Shopping Cart"
+              >
+                <ShoppingBag size={15} className="transition-transform group-hover:-translate-y-0.5" />
+                <span className="hidden sm:inline font-medium">Cart</span>
+                <span className="bg-slate-950/40 text-white text-[10px] px-1.5 py-0.5 rounded-md font-black min-w-[18px]">
+                  {cart}
+                </span>
+              </button>
             </NavLink>
           </div>
 
@@ -279,10 +291,9 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
       </header>
 
       {/* 3. MOBILE MENU PANEL CONTAINER */}
-      <div 
-        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-slate-900 border-slate-800 ${
-          isMobileMenuOpen ? 'max-h-80 border-b px-4 py-3 shadow-2xl' : 'max-h-0'
-        }`}
+      <div
+        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-slate-900 border-slate-800 ${isMobileMenuOpen ? 'max-h-80 border-b px-4 py-3 shadow-2xl' : 'max-h-0'
+          }`}
       >
         <div className="space-y-1">
           {mobileLinks.map((link) => (
@@ -290,16 +301,15 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
               key={link.name}
               to={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                link.highlight
-                  ? 'bg-red-950/20 text-red-400 hover:bg-red-950/40'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
+              className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${link.highlight
+                ? 'bg-red-950/20 text-red-400 hover:bg-red-950/40'
+                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                }`}
             >
               {link.name}
             </NavLink>
           ))}
-          
+
           <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400">
             <a href="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white">
               <Heart size={14} /> Saved Items
@@ -313,4 +323,4 @@ export default function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
 
     </div>
   );
-}
+});

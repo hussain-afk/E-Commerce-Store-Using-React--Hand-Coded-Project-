@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, memo } from 'react';
 import { useParams, useNavigate, } from 'react-router-dom';
 import { ProductContext } from '../utils/context/ProductApi';
 import { ToastContext } from '../utils/context/ToastContext'
@@ -10,7 +10,7 @@ import { addToWishlist } from '../store/reducers/wishlistSlice';
 function ProdDeatailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products, cartData, setCartData, setCart } = useContext(ProductContext);
+  const { products, cartData, setCartData, setCart, setWishlist } = useContext(ProductContext);
   const { showToast } = useContext(ToastContext);
   const dispatch = useDispatch();
 
@@ -21,7 +21,7 @@ function ProdDeatailPage() {
 
   const product = products?.find((item) => item.id === Number(id));
 
-  
+
 
   // Sync active image once the context data structure loads successfully
   useEffect(() => {
@@ -35,6 +35,17 @@ function ProdDeatailPage() {
     showToast(`${product.title} has been added to your system cart!`, 'success');
     // Optionally, you can also update local cart data if needed
     setCart((prevCart) => prevCart + 1);
+  }
+
+  function handleAddToWishlist() {
+    if (!isWishlisted) {
+      dispatch(addToWishlist(product));
+      showToast(`${product.title} has been added to your wishlist!`, 'success');
+    } else {
+      // Optionally, you can implement a remove from wishlist action here
+      showToast(`${product.title} is already in your wishlist.`, 'info');
+    }
+    setWishlist((prevWishlist) => prevWishlist + 1);
   }
 
   // Handle the initial context pipeline downloading layout state
@@ -120,8 +131,8 @@ function ProdDeatailPage() {
                     key={idx}
                     onClick={() => setActiveImg(imgUrl)}
                     className={`w-20 h-20 shrink-0 bg-slate-950 rounded-xl border p-2 flex items-center justify-center transition-all ${activeImg === imgUrl
-                        ? 'border-blue-500 bg-blue-950/10 shadow-lg shadow-blue-500/5'
-                        : 'border-slate-900 hover:border-slate-800'
+                      ? 'border-blue-500 bg-blue-950/10 shadow-lg shadow-blue-500/5'
+                      : 'border-slate-900 hover:border-slate-800'
                       }`}
                   >
                     <img src={imgUrl} alt="Thumbnail preview" className="max-h-full max-w-full object-contain" />
@@ -220,15 +231,7 @@ function ProdDeatailPage() {
                 {/* Wishlist Icon Button */}
                 <button
                   type="button"
-                  onClick={() => {
-                    if (!isWishlisted) {
-                      dispatch(addToWishlist(product));
-                      showToast(`${product.title} has been added to your wishlist!`, 'success');
-                    } else {
-                      // Optionally, you can implement a remove from wishlist action here
-                      showToast(`${product.title} is already in your wishlist.`, 'info');
-                    }
-                  }}
+                  onClick={()=> handleAddToWishlist()}
                   className="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-400 hover:text-red-400 rounded-xl transition-all active:scale-95"
                   aria-label="Save product element"
                 >
@@ -252,4 +255,4 @@ function ProdDeatailPage() {
   );
 }
 
-export default ProdDeatailPage;
+export default memo(ProdDeatailPage);

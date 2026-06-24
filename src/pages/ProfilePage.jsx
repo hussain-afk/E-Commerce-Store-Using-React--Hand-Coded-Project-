@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { memo, useContext } from 'react'
 import { ProductContext } from '../utils/context/ProductApi'
 import { replace, useNavigate, useParams } from 'react-router-dom';
 
@@ -135,4 +135,4 @@ function ProfilePage() {
   )
 }
 
-export default ProfilePage
+export default memo(ProfilePage)

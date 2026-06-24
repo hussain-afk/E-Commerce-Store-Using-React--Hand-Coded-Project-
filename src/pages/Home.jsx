@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Hero from '../components/Hero'
 import ProductCard from '../components/ProdCard'
 import { NavLink } from 'react-router-dom'
@@ -47,4 +47,4 @@ function Home() {
   )
 }
 
-export default Home
+export default memo(Home)

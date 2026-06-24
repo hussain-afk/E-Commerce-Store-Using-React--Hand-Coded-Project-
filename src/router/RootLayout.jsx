@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/Sidebar';
-// import IntroLoader from '../components/IntroLoader';
+import IntroLoader from '../components/IntroLoader';
 
-export default function RootLayout() {
+function RootLayout() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  // const [isIntroLoading, setIsIntroLoading] = useState(true);
+  const [isIntroLoading, setIsIntroLoading] = useState(true);
 
   return (
     // 1. Lock the outer window frame to exactly 100vh
    <>
    {/* 1. Show the Intro Loader if it hasn't completed yet */}
-      {/* {isIntroLoading && (
+      {isIntroLoading && (
         <IntroLoader onComplete={() => setIsIntroLoading(false)} />
-      )} */}
+      )}
     <div className="h-screen bg-slate-950 text-slate-100 flex flex-col font-sans overflow-hidden">
       
       {/* Global Header */}
@@ -45,3 +45,4 @@ export default function RootLayout() {
    </>
   );
 }
+export default memo(RootLayout);

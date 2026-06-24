@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Home, Grid, Flame, Heart, History, User,
   Settings, HelpCircle, LogOut, ArrowRight, X
@@ -7,7 +7,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 
-export default function Sidebar({ isOpen, onClose }) {
+ function Sidebar({ isOpen, onClose }) {
   const { auth, setAuth, setUser, profileUrl, setProfileUrl } = useContext(ProductContext);
 
 
@@ -151,3 +151,4 @@ export default function Sidebar({ isOpen, onClose }) {
     </>
   );
 }
+export default memo(Sidebar, () => true);

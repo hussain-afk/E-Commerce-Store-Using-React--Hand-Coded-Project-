@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Send, ShieldCheck, Truck, RefreshCw, HelpCircle, ArrowUpRight } from 'lucide-react';
 
-export default function Footer() {
+export default React.memo(function Footer() {
   const [email, setEmail] = useState('');
 
   const handleSubscribe = (e) => {
@@ -84,9 +84,9 @@ export default function Footer() {
         <div className="lg:col-span-5 space-y-6">
           <div className="flex items-center gap-2 select-none">
             <div className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-2 rounded-xl text-xs font-black shadow-md shadow-blue-500/10">
-              NX
+              MHM.DEV
             </div>
-            <span className="text-base font-black tracking-wider text-white">NEXUS.</span>
+            {/* <span className="text-base font-black tracking-wider text-white">NEXUS.</span> */}
           </div>
           
           <p className="text-slate-400 font-medium leading-relaxed max-w-sm">
@@ -166,7 +166,7 @@ export default function Footer() {
           
           {/* Copyright block */}
           <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1">
-            <span>© {new Date().getFullYear()} Nexus Inc.</span>
+            <span>© {new Date().getFullYear()} Mhm.Dev Inc.</span>
             <a href="/privacy" className="hover:text-slate-400 transition-colors">Privacy Infrastructure</a>
             <a href="/terms" className="hover:text-slate-400 transition-colors">Terms of Operations</a>
           </div>
@@ -187,4 +187,4 @@ export default function Footer() {
 
     </footer>
   );
-}
+});

@@ -1,5 +1,5 @@
 // import React from 'react';
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 import { ToastContext } from '../utils/context/ToastContext';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { addToCart } from '../store/reducers/CartSlice';
 
 function WishListPage() {
-    const { setCart } = useContext(ProductContext);
+    const { setCart, setWishlist } = useContext(ProductContext);
     const { showToast } = useContext(ToastContext);
     const { id } = useParams();
     const wishlist = useSelector((state) => state.wishlist.wishlist);
@@ -19,7 +19,13 @@ function WishListPage() {
         dispatch(addToCart(item));
         dispatch(removeFromWishlist(item.id));
         setCart(prev => prev +1); // Increment cart count in context
+        setWishlist((prev) => prev - 1); // Decrement wishlist count in context
         showToast('Item moved to cart!', 'success');
+    };
+    const handleRemoveFromWishlist = (itemId) => {
+        dispatch(removeFromWishlist(itemId));
+        setWishlist((prev) => prev - 1);
+        showToast('Item removed from wishlist.', 'info');
     };
 
     return (
@@ -78,7 +84,7 @@ function WishListPage() {
 
                                 {/* Delete Shortcut Overlay */}
                                 <button
-                                    onClick={() => dispatch(removeFromWishlist(item.id))}
+                                    onClick={() => handleRemoveFromWishlist(item.id)}
                                     className="absolute top-3 right-3 p-2 bg-slate-900/80 hover:bg-slate-800 rounded-full text-slate-400 hover:text-red-400 transition shadow-md backdrop-blur-xs border border-slate-800"
                                     title="Remove item"
                                 >
@@ -125,4 +131,4 @@ function WishListPage() {
     );
 }
 
-export default WishListPage;
+export default memo(WishListPage);

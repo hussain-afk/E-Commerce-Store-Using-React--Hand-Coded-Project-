@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, memo } from 'react'
 import { ProductContext } from '../utils/context/ProductApi'
 import { ToastContext } from '../utils/context/ToastContext'
 import { useSelector, useDispatch } from 'react-redux'
@@ -233,4 +233,4 @@ function CartPage() {
   )
 }
 
-export default CartPage
+export default memo(CartPage)
