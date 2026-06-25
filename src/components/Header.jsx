@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { ShoppingBag, User, Search, Menu, X, Heart, Bell, Flame, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 
 export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCount = 3 }) {
@@ -17,6 +16,10 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
   const { products, user, cart, wishlist } = useContext(ProductContext);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+
+  // Wishlist count nikalne ke liye check (Array hai ya Direct Number)
+  const wishlistCount = Array.isArray(wishlist) ? wishlist.length : (Number(wishlist) || 0);
+  const cartCountValue = Array.isArray(cart) ? cart.length : (Number(cart) || 0);
 
   // --- HANDLE SEARCH FILTERING ---
   useEffect(() => {
@@ -89,9 +92,6 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
               <span className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white px-2.5 py-1 rounded-xl text-xs font-black shadow-md shadow-blue-500/20 tracking-wider">
                 MHM.DEV
               </span>
-              <span className="hidden xs:block font-sans tracking-wide">
-                NEXUS<span className="text-blue-500 font-extrabold">.</span>
-              </span>
             </NavLink>
           </div>
 
@@ -102,7 +102,6 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
               onMouseEnter={() => setIsMegaMenuOpen(true)}
               onMouseLeave={() => setIsMegaMenuOpen(false)}
             >
-              {/* MEGA MENU DROP CONTAINER */}
               {isMegaMenuOpen && (
                 <div className="absolute top-[60px] -left-12 w-[540px] bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl shadow-black/80 grid grid-cols-2 gap-6">
                   <div>
@@ -241,21 +240,18 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
               <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full ring-2 ring-slate-900 animate-pulse" />
             </button>
 
+            {/* DESKTOP WISHLIST BUTTON */}
             <NavLink to="/wishlist">
               <button
                 className="relative p-2 text-slate-400 hover:text-white rounded-xl hidden sm:block hover:bg-slate-800/40 transition-colors"
                 aria-label="Favorites"
               >
                 <Heart size={18} />
-
-                {
-                  <span
-                    className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold leading-none"
-                  >
-                    {/* {wishlist.length} */}
-                    {wishlist}
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold leading-none animate-in scale-in duration-200">
+                    {wishlistCount}
                   </span>
-                }
+                )}
               </button>
             </NavLink>
 
@@ -264,15 +260,15 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
                   {user ? user.charAt(0).toUpperCase() : 'A'}
                 </div>
-                {/* CHANGED HERE: Removed hidden xl:block and added max-w constraint + truncate */}
                 <span className="text-xs font-semibold text-slate-300 block max-w-[70px] truncate select-none">
-                  {user}
+                  {user || 'Account'}
                 </span>
               </button>
             </NavLink>
 
             <div className="h-5 w-px bg-slate-800 mx-0.5 hidden sm:block" />
 
+            {/* DESKTOP CART BUTTON */}
             <NavLink to='/cart'>
               <button
                 className="flex items-center gap-2 bg-gradient-to-b from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-3.5 h-9 rounded-xl text-xs font-bold shadow-lg shadow-blue-600/20 transition-all group"
@@ -281,7 +277,7 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
                 <ShoppingBag size={15} className="transition-transform group-hover:-translate-y-0.5" />
                 <span className="hidden sm:inline font-medium">Cart</span>
                 <span className="bg-slate-950/40 text-white text-[10px] px-1.5 py-0.5 rounded-md font-black min-w-[18px]">
-                  {cart}
+                  {cartCountValue}
                 </span>
               </button>
             </NavLink>
@@ -292,8 +288,7 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
 
       {/* 3. MOBILE MENU PANEL CONTAINER */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-slate-900 border-slate-800 ${isMobileMenuOpen ? 'max-h-80 border-b px-4 py-3 shadow-2xl' : 'max-h-0'
-          }`}
+        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-slate-900 border-slate-800 ${isMobileMenuOpen ? 'max-h-80 border-b px-4 py-3 shadow-2xl' : 'max-h-0'}`}
       >
         <div className="space-y-1">
           {mobileLinks.map((link) => (
@@ -310,13 +305,26 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
             </NavLink>
           ))}
 
+          {/* MOBILE FOOTER ACTIONS */}
           <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400">
-            <a href="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white">
-              <Heart size={14} /> Saved Items
-            </a>
-            <a href="/support" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">
+            {/* FIXED MOBILE WISHLIST COUNT HERE */}
+            <NavLink 
+              to="/wishlist" 
+              onClick={() => setIsMobileMenuOpen(false)} 
+              className="flex items-center gap-2 hover:text-white group"
+            >
+              <Heart size={14} className="text-slate-400 group-hover:text-red-400 transition-colors" /> 
+              <span>Saved Items</span>
+              {wishlistCount > 0 && (
+                <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </NavLink>
+            
+            <NavLink to="/support" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">
               Customer Support
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>

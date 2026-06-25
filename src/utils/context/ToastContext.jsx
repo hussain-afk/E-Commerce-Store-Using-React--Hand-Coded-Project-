@@ -39,12 +39,7 @@ function ToastProvider({ children }) {
                             : 'bg-rose-50 border-rose-200 text-rose-900 shadow-rose-100/50'
                         }`}
                 >
-                    {/* Left Side: Icon + Message */}
                     <div className="flex items-start gap-3">
-                        {/* Dynamic Status Icon */}
-                        {/* <span className="text-lg leading-none mt-0.5 select-none">
-        {toast.type === 'success' ? '✅' : '❌'}
-      </span> */}
 
                         {/* Message Text */}
                         <span className="break-words leading-relaxed">{toast.message}</span>
