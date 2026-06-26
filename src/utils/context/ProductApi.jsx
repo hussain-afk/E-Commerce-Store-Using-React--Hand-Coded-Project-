@@ -19,6 +19,8 @@ function productProvider({ children }) {
     const [wishlist, setWishlist] = useState(0)
     // url name for profile page
     const [profileUrl, setProfileUrl] = useState(null)
+    // profile image url
+    const [profileImageUrl, setProfileImageUrl] = useState(null)
     // toast
     // const [toast, setToast] = useState({ show: false, message: '', type: '' })
 
@@ -46,7 +48,7 @@ function productProvider({ children }) {
     }
     return (
         <>
-            <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl, wishlist, setWishlist }}>
+            <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl, wishlist, setWishlist }}>
                 {children}
             </ProductContext.Provider>
 

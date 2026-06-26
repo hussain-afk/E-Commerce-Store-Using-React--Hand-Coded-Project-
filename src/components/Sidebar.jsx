@@ -7,8 +7,8 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 
- function Sidebar({ isOpen, onClose }) {
-  const { auth, setAuth, setUser, profileUrl, setProfileUrl } = useContext(ProductContext);
+function Sidebar({ isOpen, onClose }) {
+  const { auth, setAuth, setUser, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl } = useContext(ProductContext);
 
 
   // Custom navigation structure divided into semantic sections
@@ -31,6 +31,7 @@ import { ProductContext } from '../utils/context/ProductApi';
     setUser(null);
     setProfileUrl(null);
     navigate('/auth');
+    setProfileImageUrl(null);
   }
 
 
@@ -137,13 +138,35 @@ import { ProductContext } from '../utils/context/ProductApi';
           </div> */}
 
           {/* Core App Session Break Trigger */}
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-3 py-2.5 text-xs font-bold text-red-400 hover:bg-red-950/20 rounded-xl transition-all"
-          >
-            <LogOut size={16} />
-            <span>{auth}</span>
-          </button>
+          <div className="flex items-center justify-between p-2 bg-slate-900/40 backdrop-blur-md border border-slate-800/60 rounded-xl w-full">
+            {/* Left Side: Avatar & Auth Info */}
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-slate-700/50 shadow-inner">
+                {profileImageUrl ? (
+                  <img src={profileImageUrl} alt="Profile" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
+                    {auth ? auth.charAt(0).toUpperCase() : 'A'}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider text-[10px]">Account</span>
+                <span className="text-sm font-medium text-slate-200 truncate max-w-[120px]">
+                  {auth || "User"}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Side: Clean Logout Action */}
+            <button
+              onClick={handleSignOut}
+              className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-all duration-200 ease-in-out group"
+              title="Sign Out"
+            >
+              <LogOut size={18} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </div>
 
         </div>
 

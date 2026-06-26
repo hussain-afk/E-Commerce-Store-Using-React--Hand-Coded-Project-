@@ -6,7 +6,7 @@ import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signI
 
 function EnhancedAuthPage() {
   const navigate = useNavigate();
-  const { setAuth, setUser, userData, setUserData, setProfileUrl } = useContext(ProductContext);
+  const { setAuth, setUser, userData, setUserData, setProfileUrl, setProfileImageUrl } = useContext(ProductContext);
 
   // Form & Component States
   const [authMode, setAuthMode] = useState('signin');
@@ -30,7 +30,8 @@ function EnhancedAuthPage() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      
+      // console.log('Google Sign-Up Successful:', user);
+      setProfileImageUrl(user.photoURL);
       setProfileUrl(user.displayName);
       setAuth('Sign Out');
       setUser(user.email?.includes('@') ? user.email.split('@')[0] : user.email);
@@ -57,7 +58,7 @@ function EnhancedAuthPage() {
     setAuthError('');
     createUserWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
-        console.log('Signed up:', userCredential.user.email);
+        // console.log('Signed up:', userCredential.user.email);
         navigate('/');
         setAuth('Sign Out');
         setUser(userCredential.user.email.search('@') > -1 ? userCredential.user.email.split('@')[0] : userCredential.user.email);
@@ -75,7 +76,7 @@ function EnhancedAuthPage() {
     setAuthError('');
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
-        console.log('Signed in:', userCredential.user.email);
+        // console.log('Signed in:', userCredential.user.email);
         navigate('/');
         setAuth('Sign Out');
         setUser(userCredential.user.email.search('@') > -1 ? userCredential.user.email.split('@')[0] : userCredential.user.email);

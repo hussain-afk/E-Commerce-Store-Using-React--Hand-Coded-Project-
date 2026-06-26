@@ -13,7 +13,7 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const { products, user, cart, wishlist } = useContext(ProductContext);
+  const { products, user, cart, wishlist, profileImageUrl } = useContext(ProductContext);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -258,7 +258,11 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
             <NavLink to='/auth'>
               <button className="p-1 text-slate-400 hover:text-white rounded-full flex items-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-950 pr-3 pl-1 h-9 transition-all" aria-label="User profile config">
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
-                  {user ? user.charAt(0).toUpperCase() : 'A'}
+                  {profileImageUrl ? (
+                    <img src={profileImageUrl} alt="Profile" className="w-full h-full object-cover rounded-full" />
+                  ) : (
+                    <User size={16} />
+                  )}
                 </div>
                 <span className="text-xs font-semibold text-slate-300 block max-w-[70px] truncate select-none">
                   {user || 'Account'}
@@ -308,12 +312,12 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
           {/* MOBILE FOOTER ACTIONS */}
           <div className="pt-3 mt-2 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400">
             {/* FIXED MOBILE WISHLIST COUNT HERE */}
-            <NavLink 
-              to="/wishlist" 
-              onClick={() => setIsMobileMenuOpen(false)} 
+            <NavLink
+              to="/wishlist"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-2 hover:text-white group"
             >
-              <Heart size={14} className="text-slate-400 group-hover:text-red-400 transition-colors" /> 
+              <Heart size={14} className="text-slate-400 group-hover:text-red-400 transition-colors" />
               <span>Saved Items</span>
               {wishlistCount > 0 && (
                 <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] text-center">
@@ -321,7 +325,7 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
                 </span>
               )}
             </NavLink>
-            
+
             <NavLink to="/support" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-white">
               Customer Support
             </NavLink>

@@ -4,12 +4,13 @@ import { replace, useNavigate, useParams } from 'react-router-dom';
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { userData , setAuth, setUser, profileUrl, setProfileUrl } = useContext(ProductContext)
+  const { userData , setAuth, setUser, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl } = useContext(ProductContext)
 
   const handleSignOut = () => {
     setAuth('Sign In');
     setUser(null);
     setProfileUrl(null);
+    setProfileImageUrl(null);
     navigate('/');
   }
   // const { displayName } = useParams();
@@ -59,9 +60,9 @@ function ProfilePage() {
           {/* Avatar Area */}
           <div className="relative -mt-[75px] mb-4 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
             <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-500 to-indigo-500 blur-md opacity-40 group-hover:opacity-70 transition-opacity duration-500" />
-            {userData.photoURL ? (
+            {profileImageUrl ? (
               <img 
-                src={userData.photoURL} 
+                src={profileImageUrl} 
                 alt="Customer Profile" 
                 className="w-[125px] h-[125px] rounded-full border-[6px] border-[#0e1320] shadow-2xl object-cover relative z-10" 
               />
