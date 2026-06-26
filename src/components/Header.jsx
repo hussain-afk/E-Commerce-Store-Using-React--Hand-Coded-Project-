@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { ShoppingBag, User, Search, Menu, X, Heart, Bell, Flame, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { ShoppingBag, User, Search, Menu, X, Heart, Bell, Flame, ArrowRight, ShieldCheck, Zap, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ProductContext } from '../utils/context/ProductApi';
 
@@ -12,14 +12,25 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const { products, user, cart, wishlist, profileImageUrl } = useContext(ProductContext);
+  const { products, user, cart, wishlist, profileImageUrl, auth, profileUrl, handleSignOut } = useContext(ProductContext);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
   // Wishlist count nikalne ke liye check (Array hai ya Direct Number)
   const wishlistCount = Array.isArray(wishlist) ? wishlist.length : (Number(wishlist) || 0);
   const cartCountValue = Array.isArray(cart) ? cart.length : (Number(cart) || 0);
+  // other
+  const toggleDropdown = () => setIsOpen(!isOpen);
+  const closeDropdown = () => setIsOpen(false);
+  const handleAuth = () => {
+    if (auth === 'Sign In') {
+      navigate('/auth');
+    } else if (auth === 'Sign Out') {
+      handleSignOut();
+    }
+  };
 
   // --- HANDLE SEARCH FILTERING ---
   useEffect(() => {
@@ -255,20 +266,75 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
               </button>
             </NavLink>
 
-            <NavLink to='/auth'>
-              <button className="p-1 text-slate-400 hover:text-white rounded-full flex items-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-950 pr-3 pl-1 h-9 transition-all" aria-label="User profile config">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs">
+            <div className="relative inline-block text-left">
+              {/* Trigger Button */}
+              <button
+                onClick={toggleDropdown}
+                className={`p-1 pr-3 pl-1 h-9 flex items-center gap-2 bg-slate-950 border rounded-full select-none transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950 ${isOpen
+                    ? 'border-slate-600 text-white shadow-md bg-slate-900'
+                    : 'border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  }`}
+                aria-label="User profile config"
+                aria-expanded={isOpen}
+                aria-haspopup="true"
+              >
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xs overflow-hidden shrink-0">
                   {profileImageUrl ? (
-                    <img src={profileImageUrl} alt="Profile" className="w-full h-full object-cover rounded-full" />
+                    <img src={profileImageUrl} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
-                    <User size={16} />
+                    <User size={14} />
                   )}
                 </div>
-                <span className="text-xs font-semibold text-slate-300 block max-w-[70px] truncate select-none">
+                <span className="text-xs font-semibold text-slate-300 block max-w-[70px] truncate">
                   {user || 'Account'}
                 </span>
+                <ChevronDown
+                  size={14}
+                  className={`text-slate-500 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180 text-slate-300' : ''}`}
+                />
               </button>
-            </NavLink>
+
+              {/* Dropdown Menu */}
+              {isOpen && (
+                <>
+                  {/* Overlay to close dropdown when clicking outside */}
+                  <div className="fixed inset-0 z-10 cursor-default" onClick={closeDropdown} />
+
+                  {/* Menu Items */}
+                  <div className="absolute right-0 mt-2 w-52 rounded-xl border border-slate-800 bg-slate-950/95 backdrop-blur-md p-1.5 shadow-2xl ring-1 ring-white/5 z-20 focus:outline-none animate-in fade-in zoom-in-95 duration-150">
+                    {/* User Identity Header */}
+                    <div className="px-3 py-2 mb-1 border-b border-slate-900">
+                      <p className="text-xs font-semibold text-white truncate">{user || 'Welcome'}</p>
+                      <p className="text-[10px] text-slate-500 truncate">Manage account</p>
+                    </div>
+
+                    <div className="space-y-0.5">
+                      <NavLink
+                        to={user ? `/profile/${profileUrl}` : '/auth'}
+                        onClick={closeDropdown}
+                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800/40 hover:text-white rounded-lg transition-colors group"
+                        className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-900 hover:text-white rounded-lg transition-colors group"
+                        onClick={closeDropdown}
+                      >
+                        <Settings size={14} className="text-slate-500 group-hover:text-slate-300 transition-colors" />
+                        Settings
+                      </NavLink>
+                      <button
+                        onClick={() => {
+                          // Handle logout logic here
+                          handleAuth();
+                          // closeDropdown();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 rounded-lg text-left transition-colors group"
+                      >
+                        <LogOut size={14} className="text-rose-500/70 group-hover:text-rose-400 transition-colors" />
+                        {auth}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
             <div className="h-5 w-px bg-slate-800 mx-0.5 hidden sm:block" />
 

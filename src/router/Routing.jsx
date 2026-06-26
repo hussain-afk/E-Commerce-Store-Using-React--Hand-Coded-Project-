@@ -22,7 +22,7 @@ function Routing() {
     <BrowserRouter>
       <Routes>
         {/* 404 Catch-all route */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="/*" element={<NotFound />} />
         
         {/* Layout and nested routes */}
         <Route path="/" element={<RootLayout />} >

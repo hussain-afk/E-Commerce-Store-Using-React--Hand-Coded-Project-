@@ -4,9 +4,9 @@ import { ToastContext } from './ToastContext.jsx'
 
 export const ProductContext = createContext()
 function productProvider({ children }) {
-    
+
     const { showToast } = useContext(ToastContext)
-   
+
     const [products, setProducts] = useState(null)
 
     // other global states and functions can be added here
@@ -25,7 +25,7 @@ function productProvider({ children }) {
     // const [toast, setToast] = useState({ show: false, message: '', type: '' })
 
 
-    
+
 
     const getProducts = async () => {
         try {
@@ -46,14 +46,21 @@ function productProvider({ children }) {
         getProducts()
         showToast('Products refreshed successfully!', 'success')
     }
+    const handleSignOut = () => {
+        setAuth('Sign In');
+        setUser(null);
+        setProfileUrl(null);
+        // navigate('/auth');
+        setProfileImageUrl(null);
+    }
     return (
         <>
-            <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl, wishlist, setWishlist }}>
+            <ProductContext.Provider value={{ products, auth, setAuth, user, setUser, loading, cart, setCart, userData, setUserData, refreshProducts, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl, wishlist, setWishlist, handleSignOut }}>
                 {children}
             </ProductContext.Provider>
-
+        
             {/* toast element */}
-            
+
         </>
 
     )

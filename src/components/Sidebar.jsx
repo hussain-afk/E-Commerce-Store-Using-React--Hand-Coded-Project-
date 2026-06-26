@@ -8,7 +8,7 @@ import { useContext } from 'react';
 import { ProductContext } from '../utils/context/ProductApi';
 
 function Sidebar({ isOpen, onClose }) {
-  const { auth, setAuth, setUser, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl } = useContext(ProductContext);
+  const { auth, setAuth, setUser, profileUrl, setProfileUrl, profileImageUrl, setProfileImageUrl, handleSignOut } = useContext(ProductContext);
 
 
   // Custom navigation structure divided into semantic sections
@@ -26,13 +26,7 @@ function Sidebar({ isOpen, onClose }) {
   const currentPath = useLocation().pathname;
 
   const navigate = useNavigate();
-  const handleSignOut = () => {
-    setAuth('Sign In');
-    setUser(null);
-    setProfileUrl(null);
-    navigate('/auth');
-    setProfileImageUrl(null);
-  }
+  
 
 
   return (
