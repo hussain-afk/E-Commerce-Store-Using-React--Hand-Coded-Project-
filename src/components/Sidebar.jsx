@@ -27,6 +27,14 @@ function Sidebar({ isOpen, onClose }) {
 
   const navigate = useNavigate();
   
+  function handleAuthLogic() {
+    if (auth === 'Sign In') {
+      navigate('/auth');
+    } else {
+      handleSignOut();
+      // navigate('/auth');
+    }
+  }
 
 
   return (
@@ -154,7 +162,7 @@ function Sidebar({ isOpen, onClose }) {
 
             {/* Right Side: Clean Logout Action */}
             <button
-              onClick={handleSignOut}
+              onClick={handleAuthLogic}
               className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-all duration-200 ease-in-out group"
               title="Sign Out"
             >

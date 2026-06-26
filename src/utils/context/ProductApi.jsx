@@ -50,7 +50,6 @@ function productProvider({ children }) {
         setAuth('Sign In');
         setUser(null);
         setProfileUrl(null);
-        // navigate('/auth');
         setProfileImageUrl(null);
     }
     return (
