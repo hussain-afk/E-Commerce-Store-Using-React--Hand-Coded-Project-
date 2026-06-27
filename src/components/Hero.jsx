@@ -40,14 +40,18 @@ export default function EcommerceHero() {
             </p>
 
             <div className="flex flex-wrap gap-3 mt-6">
-              <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-xl text-white font-semibold transition-all duration-300">
+              <NavLink to="/products">
+                <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-5 py-3 rounded-xl text-white font-semibold transition-all duration-300">
                 Shop Now
                 <ArrowRight size={16} />
               </button>
+              </NavLink>
 
-              <button className="border border-slate-800 hover:border-slate-700 px-5 py-3 rounded-xl text-slate-300 hover:text-white transition-all duration-300">
+              <NavLink to="/products">
+                <button className="border border-slate-800 hover:border-slate-700 px-5 py-3 rounded-xl text-slate-300 hover:text-white transition-all duration-300">
                 Explore Products
               </button>
+              </NavLink>
             </div>
 
             <div className="flex flex-wrap gap-6 mt-8 pt-5 border-t border-slate-800">

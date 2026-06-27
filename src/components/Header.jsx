@@ -67,8 +67,8 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
 
   const mobileLinks = [
     { name: 'Dashboard', href: '/' },
-    { name: 'Shop All', href: '/shop' },
-    { name: 'New Drops', href: '/new' },
+    // { name: 'Shop All', href: '/products' },
+    // { name: 'New Drops', href: '/new' },
     { name: 'The Vault', href: '/cart' },
     { name: 'Wishlist', href: '/wishlist' },
     { name: 'Clearance Sale', href: '/sale', highlight: true }
@@ -138,7 +138,7 @@ export default React.memo(function EnhancedToggleHeader({ onMenuToggle, cartCoun
               )}
             </div>
 
-            <NavLink to="/new" className="hover:text-white transition-colors">New Drops</NavLink>
+            <NavLink to="/products" className="hover:text-white transition-colors">All Products</NavLink>
             <NavLink to="/cart" className="hover:text-white transition-colors">The Vault</NavLink>
             <NavLink to="/sale" className="text-red-400 hover:text-red-300 font-semibold transition-colors">Clearance</NavLink>
           </nav>

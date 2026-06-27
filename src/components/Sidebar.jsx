@@ -15,7 +15,8 @@ function Sidebar({ isOpen, onClose }) {
   const discoverLinks = [
     { name: 'Dashboard', href: '/', icon: Home },
     { name: 'my Collection', href: '/cart', icon: Grid },
-    { name: 'Wishlist', href: '/wishlist', icon: Heart }
+    { name: 'Wishlist', href: '/wishlist', icon: Heart },
+    { name: 'All Products', href: '/products', icon: Grid },
   ];
 
   const accountLinks = [
